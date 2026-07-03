@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0">
+<title>市場シグナル・コンフルエンス</title>
+
+<!-- iPhone home screen app behavior -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="市場シグナル">
+<meta name="theme-color" content="#10131A">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD3UlEQVR4nO3cPY4UVxiF4cJyagkJycGIzLJYAjFLcOxFEHkVjliEYy+BmCUgy5nlwCmpAwcjWWjo03T9dN9TXc8TDi1mxH3nK/oyH8+ev3iY4JRvRn8B9BIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOom9HfwEs9+Hdqycfef3244a/v8lBdN3J8fOb77784G/vP131k7KVa8VxMovPf0ki/a7yWDlTxqzXMNb2cVx+6voot3Ecc89bH822jGPZSeujlreyRJvFsWYAGB6dTA4icRDd6N9W3v/x/fkXPLz8ygv4399//XmbT2RyEN1ocrz58Z/zL3CbXsjkINosjjXf+sZGJ5ODaMs4lg0AY6PWxpNj7kkro9n2j5XLz1sZ5a7yd45LTl0Z/a51z/F49n6GdNeuewmmg13zVpZIHETiIBIHkTiIxEEkDqJ9/BcMLtOGaI/DQvZA1Y8VC9lj9cZhIXu40jgsZDdojMNCdonGOChRF4eF7B51cdBDHETtl2BPWMieLFLTYGeTw0L2LZkcRHVxWMjuURcHPRrjsJBdojGOyUJ2h9I4JgvZBXrjmCxkj9Z+z2Ehe6D2OB7pYIjqxwpjiYNIHETiIBIH0T7erWzLG+MLHSsOy5WzHOixYrlyrqPEYblygUPEYblymfuPw3LlYvcfB4vdeRyWK9e48zhYQxxEx7oEe2Kny5XWIRnv0JPDcuV5JgfRncdhuXKNO4+DNe4/DsuVi91/HJPlyqUOEcdkuXKRo8QxWa6c71j3HJYrZzlWHI90cKEDPVaYSxxE4iASB5E4iI74buUaPrx79eUHX7/9ePuvZEPiWOtkFp//0n4T8VhZ5UwZs17TSRzLXX7qO+1DHAvNPe899iGOJZad9O76EAeROGZbMwD2NTzEQSQOIpdgG/vp13/Pv+Dh5Q8rP4V1SMYzOTb2+y9f+SPd0W26yUEkjtnWfOvvaGxM4uAMcSyxbADsa2xM4lhs7knvroxJHGtcft57LGMSx0qXnPpOy5jcc6z3ePZ+hpRo7x2c5LFCJA4icRCJg0gcROIgEgeRe45GJVdq4uhStZbtsVKkbS1bHC0K17LFUaFzLVsc49WuZYuDSByDNa9Wi4NIHEQuwaqdXMv+6sblVkwOIpOj2s2GxEkmB5E4Bmv+sXVxEIljvNq1bHFU6FzLFkeLwrVscRRpW8t2z9Glai1bHI1K3t96rBA9e/7iYfTXQCmTg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB9F/j8UCtlyR54IAAAAASUVORK5CYII=">
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD3UlEQVR4nO3cPY4UVxiF4cJyagkJycGIzLJYAjFLcOxFEHkVjliEYy+BmCUgy5nlwCmpAwcjWWjo03T9dN9TXc8TDi1mxH3nK/oyH8+ev3iY4JRvRn8B9BIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOom9HfwEs9+Hdqycfef3244a/v8lBdN3J8fOb77784G/vP131k7KVa8VxMovPf0ki/a7yWDlTxqzXMNb2cVx+6voot3Ecc89bH822jGPZSeujlreyRJvFsWYAGB6dTA4icRDd6N9W3v/x/fkXPLz8ygv4399//XmbT2RyEN1ocrz58Z/zL3CbXsjkINosjjXf+sZGJ5ODaMs4lg0AY6PWxpNj7kkro9n2j5XLz1sZ5a7yd45LTl0Z/a51z/F49n6GdNeuewmmg13zVpZIHETiIBIHkTiIxEEkDqJ9/BcMLtOGaI/DQvZA1Y8VC9lj9cZhIXu40jgsZDdojMNCdonGOChRF4eF7B51cdBDHETtl2BPWMieLFLTYGeTw0L2LZkcRHVxWMjuURcHPRrjsJBdojGOyUJ2h9I4JgvZBXrjmCxkj9Z+z2Ehe6D2OB7pYIjqxwpjiYNIHETiIBIH0T7erWzLG+MLHSsOy5WzHOixYrlyrqPEYblygUPEYblymfuPw3LlYvcfB4vdeRyWK9e48zhYQxxEx7oEe2Kny5XWIRnv0JPDcuV5JgfRncdhuXKNO4+DNe4/DsuVi91/HJPlyqUOEcdkuXKRo8QxWa6c71j3HJYrZzlWHI90cKEDPVaYSxxE4iASB5E4iI74buUaPrx79eUHX7/9ePuvZEPiWOtkFp//0n4T8VhZ5UwZs17TSRzLXX7qO+1DHAvNPe899iGOJZad9O76EAeROGZbMwD2NTzEQSQOIpdgG/vp13/Pv+Dh5Q8rP4V1SMYzOTb2+y9f+SPd0W26yUEkjtnWfOvvaGxM4uAMcSyxbADsa2xM4lhs7knvroxJHGtcft57LGMSx0qXnPpOy5jcc6z3ePZ+hpRo7x2c5LFCJA4icRCJg0gcROIgEgeRe45GJVdq4uhStZbtsVKkbS1bHC0K17LFUaFzLVsc49WuZYuDSByDNa9Wi4NIHEQuwaqdXMv+6sblVkwOIpOj2s2GxEkmB5E4Bmv+sXVxEIljvNq1bHFU6FzLFkeLwrVscRRpW8t2z9Glai1bHI1K3t96rBA9e/7iYfTXQCmTg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB9F/j8UCtlyR54IAAAAASUVORK5CYII=">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:       #10131A;
+    --panel:     #171B25;
+    --panel-2:   #1D2230;
+    --line:      #2A2F3D;
+    --text:      #E9E6DD;
+    --muted:     #7C8494;
+    --muted-2:   #4E5566;
+    --amber:     #D9A441;
+    --amber-dim: #6B5427;
+    --rust:      #9C4A3C;
+    --rust-dim:  #4A2E2A;
+    --font-disp: 'Zen Kaku Gothic New', 'Hiragino Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--ink);}
+  body{
+    font-family:var(--font-disp);
+    color:var(--text);
+    min-height:100vh;
+    padding:calc(32px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(80px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
+    background:
+      repeating-linear-gradient(115deg, rgba(217,164,65,0.025) 0px, rgba(217,164,65,0.025) 1px, transparent 1px, transparent 68px),
+      var(--ink);
+  }
+  .wrap{max-width:640px;margin:0 auto;}
+
+  /* header */
+  header{margin-bottom:28px;}
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:.18em;
+    color:var(--muted);
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  h1{
+    font-size:22px;
+    font-weight:900;
+    margin:0 0 4px;
+    letter-spacing:.02em;
+  }
+  .date-line{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--muted);
+  }
+
+  .update-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:12px;
+  }
+  .refresh-btn{
+    font-family:var(--font-mono);
+    font-size:11px;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    color:var(--text);
+    padding:6px 10px;
+    border-radius:6px;
+    cursor:pointer;
+    letter-spacing:.03em;
+  }
+  .refresh-btn:hover{border-color:var(--muted);}
+  .refresh-btn:disabled{opacity:.5;cursor:default;}
+  .last-updated{
+    font-family:var(--font-mono);
+    font-size:10px;
+    color:var(--muted-2);
+    flex:1;
+  }
+  .settings-btn{
+    background:none;
+    border:1px solid var(--line);
+    color:var(--muted);
+    width:28px;height:28px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:13px;
+    flex-shrink:0;
+  }
+  .settings-btn:hover{color:var(--text);border-color:var(--muted);}
+
+  .api-panel{
+    margin-top:10px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:12px 14px;
+  }
+  .api-panel label{
+    display:block;
+    font-size:12px;
+    font-weight:700;
+    margin-bottom:8px;
+  }
+  .api-panel label span{
+    font-weight:400;
+    color:var(--muted);
+    font-size:11px;
+  }
+  .api-panel input{
+    width:100%;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:6px;
+    color:var(--text);
+    font-family:var(--font-mono);
+    font-size:12px;
+    padding:9px 10px;
+  }
+  .api-panel input:focus{outline:none;border-color:var(--muted);}
+  .api-panel-actions{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-top:10px;
+  }
+  .api-panel-actions button{
+    font-family:var(--font-disp);
+    font-weight:700;
+    font-size:12px;
+    background:var(--amber);
+    color:var(--ink);
+    border:none;
+    border-radius:6px;
+    padding:8px 14px;
+    cursor:pointer;
+  }
+  .api-panel-actions a{
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--muted);
+    text-decoration:none;
+  }
+  .api-panel-actions a:hover{color:var(--amber);}
+
+  /* status badge */
+  .status{
+    margin-top:18px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 16px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background:var(--panel);
+    transition:border-color .5s, background .5s;
+  }
+  .status .dot{
+    width:10px;height:10px;border-radius:50%;
+    background:var(--muted-2);
+    flex-shrink:0;
+    transition:background .5s, box-shadow .5s;
+  }
+  .status .label{font-weight:700;font-size:14px;letter-spacing:.03em;}
+  .status .count{
+    margin-left:auto;
+    font-family:var(--font-mono);
+    font-size:13px;
+    color:var(--muted);
+  }
+  .status.forming{border-color:var(--amber-dim);}
+  .status.forming .dot{background:var(--amber-dim);}
+  .status.near{border-color:var(--amber);}
+  .status.near .dot{background:var(--amber);box-shadow:0 0 8px var(--amber);}
+  .status.confirmed{border-color:var(--amber);background:linear-gradient(180deg, rgba(217,164,65,0.10), rgba(217,164,65,0.03));}
+  .status.confirmed .dot{background:var(--amber);box-shadow:0 0 12px var(--amber);animation:pulse 1.6s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+
+  /* panel */
+  .panel{
+    margin-top:20px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:8px 18px 18px;
+    position:relative;
+    overflow:hidden;
+  }
+  .rows{position:relative;}
+  .rail{
+    position:absolute;
+    right:0;
+    top:14px;
+    bottom:14px;
+    width:2px;
+    background:var(--line);
+    transition:background .5s, box-shadow .5s;
+  }
+  .rail.confirmed{background:var(--amber);box-shadow:0 0 14px var(--amber);}
+
+  .row{
+    padding:16px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .row:last-child{border-bottom:none;}
+  .row-top{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:10px;
+  }
+  .row-label{font-weight:700;font-size:14px;}
+  .row-label small{
+    display:block;
+    font-family:var(--font-mono);
+    font-size:10px;
+    color:var(--muted);
+    letter-spacing:.1em;
+    margin-top:2px;
+    font-weight:400;
+  }
+  .row-status{
+    text-align:right;
+    flex-shrink:0;
+  }
+  .live-val{
+    font-family:var(--font-mono);
+    font-size:13px;
+    font-weight:700;
+    color:var(--muted);
+    white-space:nowrap;
+  }
+  .live-val.aligned{color:var(--amber);}
+  .live-val.opposed{color:var(--rust);}
+  .live-val.neutral{color:var(--muted);}
+  .cond-hint{
+    font-family:var(--font-mono);
+    font-size:9px;
+    color:var(--muted-2);
+    letter-spacing:.04em;
+    margin-top:2px;
+  }
+
+  .track-zone{
+    position:relative;
+    height:22px;
+    margin:0 40px 12px 0;
+  }
+  .track{
+    position:absolute;
+    top:50%;left:0;right:0;
+    height:2px;
+    transform:translateY(-50%);
+    background:linear-gradient(90deg, var(--line), var(--amber-dim));
+    border-radius:2px;
+  }
+  .node{
+    position:absolute;
+    top:50%;
+    width:14px;height:14px;
+    border-radius:50%;
+    background:var(--muted-2);
+    border:2px solid var(--panel);
+    transform:translate(-50%,-50%);
+    transition:left .55s cubic-bezier(.3,.8,.3,1), background .4s, box-shadow .4s;
+  }
+  .node.opposed{background:var(--rust);}
+  .node.neutral{background:var(--muted);}
+  .node.aligned{background:var(--amber);box-shadow:0 0 10px var(--amber);}
+
+  .buttons{display:flex;gap:6px;}
+  .btn{
+    flex:1;
+    font-family:var(--font-disp);
+    font-size:12px;
+    padding:7px 4px;
+    border-radius:6px;
+    border:1px solid var(--line);
+    background:var(--panel-2);
+    color:var(--muted);
+    cursor:pointer;
+    transition:all .2s;
+    letter-spacing:.02em;
+  }
+  .btn:hover{border-color:var(--muted);color:var(--text);}
+  .btn.active{background:var(--amber-dim);border-color:var(--amber);color:var(--text);font-weight:700;}
+  .btn.active.opposed-active{background:var(--rust-dim);border-color:var(--rust);}
+
+  /* note + save */
+  .note-row{margin-top:16px;}
+  textarea{
+    width:100%;
+    resize:none;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:8px;
+    color:var(--text);
+    font-family:var(--font-disp);
+    font-size:13px;
+    padding:10px 12px;
+    min-height:44px;
+  }
+  textarea:focus{outline:none;border-color:var(--muted);}
+  .save-bar{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-top:14px;
+  }
+  .save-btn{
+    font-family:var(--font-disp);
+    font-weight:700;
+    font-size:14px;
+    background:var(--amber);
+    color:var(--ink);
+    border:none;
+    border-radius:8px;
+    padding:11px 20px;
+    cursor:pointer;
+    transition:opacity .2s;
+  }
+  .save-btn:hover{opacity:.88;}
+  .save-msg{
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--muted);
+    opacity:0;
+    transition:opacity .3s;
+  }
+  .save-msg.show{opacity:1;}
+
+  /* history */
+  .history{margin-top:28px;}
+  .history h2{
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:700;
+    margin:0 0 4px;
+  }
+  .streak{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--amber);
+    margin-bottom:14px;
+  }
+  .empty-hist{
+    font-size:13px;
+    color:var(--muted);
+    padding:20px 0;
+    border-top:1px solid var(--line);
+  }
+  .hist-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:11px 0;
+    border-top:1px solid var(--line);
+  }
+  .hist-date{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--muted);
+    width:64px;
+    flex-shrink:0;
+  }
+  .hist-dots{display:flex;gap:4px;flex-shrink:0;}
+  .hist-dots span{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--muted-2);
+  }
+  .hist-dots span.aligned{background:var(--amber);}
+  .hist-dots span.opposed{background:var(--rust);}
+  .hist-count{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--text);
+    width:32px;
+    flex-shrink:0;
+  }
+  .hist-note{
+    font-size:12px;
+    color:var(--muted);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    flex:1;
+  }
+  .hist-item.full .hist-count{color:var(--amber);font-weight:700;}
+
+  .reset-line{
+    margin-top:24px;
+    text-align:right;
+  }
+  .reset-line button{
+    background:none;
+    border:none;
+    color:var(--muted-2);
+    font-family:var(--font-mono);
+    font-size:10px;
+    letter-spacing:.06em;
+    cursor:pointer;
+    text-decoration:underline;
+  }
+  .reset-line button:hover{color:var(--rust);}
+
+  /* install banner */
+  .install-banner{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px 12px;
+    margin-bottom:18px;
+    font-size:12px;
+    color:var(--muted);
+  }
+  .install-banner .icon{
+    font-family:var(--font-mono);
+    font-size:14px;
+    color:var(--amber);
+    flex-shrink:0;
+  }
+  .install-banner .txt{flex:1;line-height:1.5;}
+  .install-banner .txt b{color:var(--text);}
+  .install-banner .close{
+    background:none;border:none;color:var(--muted-2);
+    font-size:16px;cursor:pointer;line-height:1;padding:2px 4px;
+    flex-shrink:0;
+  }
+  .install-banner .close:hover{color:var(--text);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">MACRO CONFLUENCE MONITOR</div>
+    <h1>市場シグナル・コンフルエンス</h1>
+    <div class="date-line" id="dateLine"></div>
+    <div class="update-row">
+      <button class="refresh-btn" id="refreshBtn">⟳ 更新</button>
+      <span class="last-updated" id="lastUpdated">未取得</span>
+      <button class="settings-btn" id="settingsBtn">⚙</button>
+    </div>
+    <div class="api-panel" id="apiPanel" style="display:none;">
+      <label>Finnhub APIキー <span>（株式・金利・金の自動取得に使用）</span></label>
+      <input type="text" id="apiKeyInput" placeholder="無料キーを貼り付け" autocapitalize="off" autocorrect="off" spellcheck="false">
+      <div class="api-panel-actions">
+        <button id="apiKeySave">保存して更新</button>
+        <a href="https://finnhub.io/register" target="_blank" rel="noopener">無料キー取得 ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="install-banner" id="installBanner" style="display:none;">
+    <div class="icon">&#x2295;</div>
+    <div class="txt"><b>ホーム画面に追加</b>すると、アプリのように起動できます。共有ボタン →「ホーム画面に追加」</div>
+    <button class="close" id="installBannerClose">&times;</button>
+  </div>
+
+  <div class="status" id="statusBox">
+    <div class="dot"></div>
+    <div class="label" id="statusLabel">待機中</div>
+    <div class="count" id="statusCount">0 / 5 一致</div>
+  </div>
+
+  <div class="panel">
+    <div class="rows" id="rows"></div>
+
+    <div class="note-row">
+      <textarea id="note" placeholder="メモ（任意）"></textarea>
+    </div>
+    <div class="save-bar">
+      <button class="save-btn" id="saveBtn">今日を記録</button>
+      <span class="save-msg" id="saveMsg">保存しました</span>
+    </div>
+  </div>
+
+  <div class="history">
+    <h2>記録履歴</h2>
+    <div class="streak" id="streak" style="display:none;"></div>
+    <div id="histList"></div>
+  </div>
+
+  <div class="reset-line">
+    <button id="resetBtn">全履歴を消去</button>
+  </div>
+
+</div>
+
+<script>
+const INDICATORS = [
+  { key:'usd',    label:'ドル',           sub:'USD baskets',   aligned:'down', options:['上昇','横ばい','下落'] },
+  { key:'stocks', label:'株式',           sub:'SPY (S&P500)',  aligned:'up',   options:['上昇','横ばい','下落'] },
+  { key:'yield',  label:'米10年金利',     sub:'IEFから逆算',    aligned:'down', options:['上昇','横ばい','下落'] },
+  { key:'gold',   label:'金',             sub:'GLD',           aligned:'up',   options:['上昇','横ばい','下落'] },
+  { key:'btc',    label:'ビットコイン',    sub:'BTC/USD',       aligned:'up',   options:['上昇','横ばい','下落'] },
+];
+// map button label -> direction value
+const LABEL_TO_DIR = { '上昇':'up', '横ばい':'flat', '下落':'down' };
+
+let selections = {};
+INDICATORS.forEach(i => selections[i.key] = 'flat');
+
+function scoreOf(ind){
+  const dir = selections[ind.key];
+  if (dir === ind.aligned) return 1;
+  if (dir === 'flat') return 0.5;
+  return 0;
+}
+function bucketOf(score){
+  if (score === 1) return 'aligned';
+  if (score === 0.5) return 'neutral';
+  return 'opposed';
+}
+
+function todayStr(){
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function formatDateLabel(dateStr){
+  const [y,m,d] = dateStr.split('-').map(Number);
+  const dt = new Date(y, m-1, d);
+  const wd = ['日','月','火','水','木','金','土'][dt.getDay()];
+  return `${m}/${d} (${wd})`;
+}
+
+function renderDateLine(){
+  const dt = new Date();
+  const wd = ['日','月','火','水','木','金','土'][dt.getDay()];
+  document.getElementById('dateLine').textContent =
+    `${dt.getFullYear()}年${dt.getMonth()+1}月${dt.getDate()}日 (${wd}) — 今日のシグナル`;
+}
+
+function renderRows(){
+  const container = document.getElementById('rows');
+  container.innerHTML = '';
+  const rail = document.createElement('div');
+  rail.className = 'rail';
+  rail.id = 'rail';
+  container.appendChild(rail);
+
+  INDICATORS.forEach(ind => {
+    const row = document.createElement('div');
+    row.className = 'row';
+
+    const alignedLabelText = ind.aligned === 'up' ? '一致:上昇' : '一致:下落';
+
+    row.innerHTML = `
+      <div class="row-top">
+        <div class="row-label">${ind.label}<small>${ind.sub}</small></div>
+        <div class="row-status">
+          <div class="live-val" id="liveval-${ind.key}">--</div>
+          <div class="cond-hint">${alignedLabelText}</div>
+        </div>
+      </div>
+      <div class="track-zone">
+        <div class="track"></div>
+        <div class="node" id="node-${ind.key}"></div>
+      </div>
+      <div class="buttons" id="btns-${ind.key}"></div>
+    `;
+    container.appendChild(row);
+
+    const btnWrap = row.querySelector(`#btns-${ind.key}`);
+    ind.options.forEach(optLabel => {
+      const dir = LABEL_TO_DIR[optLabel];
+      const b = document.createElement('button');
+      b.className = 'btn';
+      b.textContent = optLabel;
+      b.addEventListener('click', () => {
+        selections[ind.key] = dir;
+        renderState();
+      });
+      btnWrap.appendChild(b);
+    });
+  });
+
+  renderState();
+}
+
+function renderState(){
+  let alignedCount = 0;
+  INDICATORS.forEach(ind => {
+    const score = scoreOf(ind);
+    const bucket = bucketOf(score);
+    if (bucket === 'aligned') alignedCount++;
+
+    const node = document.getElementById(`node-${ind.key}`);
+    node.style.left = (score*100) + '%';
+    node.className = 'node ' + bucket;
+
+    const btnWrap = document.getElementById(`btns-${ind.key}`);
+    [...btnWrap.children].forEach(b => {
+      const dir = LABEL_TO_DIR[b.textContent];
+      b.classList.remove('active','opposed-active');
+      if (dir === selections[ind.key]){
+        b.classList.add('active');
+        if (dir !== ind.aligned && dir !== 'flat') b.classList.add('opposed-active');
+      }
+    });
+  });
+
+  const statusBox = document.getElementById('statusBox');
+  const statusLabel = document.getElementById('statusLabel');
+  const statusCount = document.getElementById('statusCount');
+  const rail = document.getElementById('rail');
+
+  statusCount.textContent = `${alignedCount} / 5 一致`;
+  statusBox.classList.remove('forming','near','confirmed');
+  rail.classList.remove('confirmed');
+
+  if (alignedCount <= 1){
+    statusLabel.textContent = '待機中';
+  } else if (alignedCount <= 3){
+    statusLabel.textContent = '形成中';
+    statusBox.classList.add('forming');
+  } else if (alignedCount === 4){
+    statusLabel.textContent = '接近';
+    statusBox.classList.add('near');
+  } else {
+    statusLabel.textContent = '確認';
+    statusBox.classList.add('confirmed');
+    rail.classList.add('confirmed');
+  }
+
+  return alignedCount;
+}
+
+function alignedCountFor(entry){
+  let c = 0;
+  INDICATORS.forEach(ind => {
+    if (entry[ind.key] === ind.aligned) c++;
+  });
+  return c;
+}
+
+const STORAGE_KEY = 'signal-log-v1';
+
+async function loadData(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e){
+    console.error('storage read failed', e);
+  }
+  return { entries:{} };
+}
+
+async function saveData(data){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    return true;
+  } catch(e){
+    console.error('storage write failed', e);
+    return false;
+  }
+}
+
+function renderHistory(data){
+  const list = document.getElementById('histList');
+  const streakEl = document.getElementById('streak');
+  const dates = Object.keys(data.entries).sort().reverse();
+
+  if (dates.length === 0){
+    list.innerHTML = `<div class="empty-hist">まだ記録がありません。今日のシグナルを設定して「今日を記録」を押してください。</div>`;
+    streakEl.style.display = 'none';
+    return;
+  }
+
+  // streak: consecutive most-recent entries with alignedCount >= 4
+  let streak = 0;
+  for (const d of dates){
+    if (alignedCountFor(data.entries[d]) >= 4) streak++;
+    else break;
+  }
+  if (streak >= 2){
+    streakEl.style.display = 'block';
+    streakEl.textContent = `連続 ${streak} 日、4指標以上が一致中`;
+  } else {
+    streakEl.style.display = 'none';
+  }
+
+  list.innerHTML = '';
+  dates.forEach(d => {
+    const entry = data.entries[d];
+    const count = alignedCountFor(entry);
+    const item = document.createElement('div');
+    item.className = 'hist-item' + (count === 5 ? ' full' : '');
+
+    const dots = INDICATORS.map(ind => {
+      const b = entry[ind.key] === ind.aligned ? 'aligned' : (entry[ind.key] === 'flat' ? '' : 'opposed');
+      return `<span class="${b}"></span>`;
+    }).join('');
+
+    item.innerHTML = `
+      <div class="hist-date">${formatDateLabel(d)}</div>
+      <div class="hist-dots">${dots}</div>
+      <div class="hist-count">${count}/5</div>
+      <div class="hist-note">${entry.note ? escapeHtml(entry.note) : ''}</div>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+const FINNHUB_KEY_STORAGE = 'finnhub-api-key';
+
+function getApiKey(){
+  try{ return localStorage.getItem(FINNHUB_KEY_STORAGE) || ''; } catch(e){ return ''; }
+}
+function setApiKeyStored(k){
+  try{ localStorage.setItem(FINNHUB_KEY_STORAGE, k); } catch(e){}
+}
+
+function classify(changePct, deadband){
+  deadband = deadband === undefined ? 0.05 : deadband;
+  if (changePct > deadband) return 'up';
+  if (changePct < -deadband) return 'down';
+  return 'flat';
+}
+function flipDir(dir){
+  if (dir === 'up') return 'down';
+  if (dir === 'down') return 'up';
+  return 'flat';
+}
+
+// BTC/USD — CoinGecko, no key needed
+async function fetchBTC(){
+  const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true');
+  if (!r.ok) throw new Error('coingecko '+r.status);
+  const d = await r.json();
+  const chg = d.bitcoin.usd_24h_change;
+  const price = Math.round(d.bitcoin.usd).toLocaleString('en-US');
+  return { changePct: chg, display: `$${price}` };
+}
+
+// USD strength proxy — average of USD vs JPY/EUR/GBP, day-over-day, via Frankfurter (ECB, no key)
+async function fetchUSD(){
+  const latest = await fetch('https://api.frankfurter.dev/v1/latest?from=USD&to=JPY,EUR,GBP')
+    .then(r => { if (!r.ok) throw new Error('frankfurter '+r.status); return r.json(); });
+  const dt = new Date(latest.date + 'T00:00:00Z');
+  dt.setUTCDate(dt.getUTCDate() - 5);
+  const priorStr = dt.toISOString().slice(0, 10);
+  const prior = await fetch(`https://api.frankfurter.dev/v1/${priorStr}?from=USD&to=JPY,EUR,GBP`)
+    .then(r => { if (!r.ok) throw new Error('frankfurter hist '+r.status); return r.json(); });
+  const ccys = ['JPY', 'EUR', 'GBP'];
+  let sum = 0;
+  ccys.forEach(c => { sum += ((latest.rates[c] - prior.rates[c]) / prior.rates[c]) * 100; });
+  const avg = sum / ccys.length;
+  return { changePct: avg, display: `${avg >= 0 ? '+' : ''}${avg.toFixed(2)}%` };
+}
+
+// Stocks / Gold / Yield-proxy — Finnhub quote (needs free API key)
+async function fetchFinnhubQuote(symbol){
+  const key = getApiKey();
+  if (!key) throw new Error('no-key');
+  const r = await fetch(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${key}`);
+  if (!r.ok) throw new Error('finnhub '+r.status);
+  const d = await r.json();
+  if (d.c === 0 && (d.dp === null || d.dp === undefined)) throw new Error('finnhub empty');
+  return { changePct: d.dp, display: `$${d.c.toFixed(2)}` };
+}
+
+const SOURCES = {
+  usd:    { fetch: fetchUSD,                         invert: false },
+  stocks: { fetch: () => fetchFinnhubQuote('SPY'),   invert: false },
+  yield:  { fetch: () => fetchFinnhubQuote('IEF'),   invert: true  }, // bond price up => yield down
+  gold:   { fetch: () => fetchFinnhubQuote('GLD'),   invert: false },
+  btc:    { fetch: fetchBTC,                         invert: false },
+};
+
+function setRefreshing(isRefreshing){
+  const btn = document.getElementById('refreshBtn');
+  if (!btn) return;
+  btn.disabled = isRefreshing;
+  btn.textContent = isRefreshing ? '⟳ 取得中…' : '⟳ 更新';
+}
+
+async function fetchAll(){
+  setRefreshing(true);
+  INDICATORS.forEach(ind => {
+    const el = document.getElementById(`liveval-${ind.key}`);
+    if (el) { el.textContent = '…'; el.className = 'live-val'; }
+  });
+
+  const results = await Promise.allSettled(INDICATORS.map(ind => SOURCES[ind.key].fetch()));
+
+  results.forEach((res, idx) => {
+    const ind = INDICATORS[idx];
+    const liveEl = document.getElementById(`liveval-${ind.key}`);
+    if (res.status === 'fulfilled'){
+      const { changePct, display } = res.value;
+      let dir = classify(changePct);
+      if (SOURCES[ind.key].invert) dir = flipDir(dir);
+      selections[ind.key] = dir;
+      const bucket = dir === ind.aligned ? 'aligned' : (dir === 'flat' ? 'neutral' : 'opposed');
+      const arrow = changePct > 0.05 ? '▲' : (changePct < -0.05 ? '▼' : '―');
+      liveEl.textContent = `${display} ${arrow}`;
+      liveEl.className = 'live-val ' + bucket;
+    } else {
+      const reason = res.reason && res.reason.message;
+      liveEl.textContent = reason === 'no-key' ? 'キー未設定' : '取得失敗';
+      liveEl.className = 'live-val';
+    }
+  });
+
+  renderState();
+  document.getElementById('lastUpdated').textContent =
+    '最終更新 ' + new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+  setRefreshing(false);
+}
+
+let dataStore = { entries:{} };
+
+
+function setupInstallBanner(){
+  const isStandalone = window.navigator.standalone === true ||
+    window.matchMedia('(display-mode: standalone)').matches;
+  const banner = document.getElementById('installBanner');
+  let dismissed = false;
+  try{ dismissed = localStorage.getItem('install-banner-dismissed') === '1'; } catch(e){}
+
+  if (!isStandalone && !dismissed){
+    banner.style.display = 'flex';
+  }
+  document.getElementById('installBannerClose').addEventListener('click', () => {
+    banner.style.display = 'none';
+    try{ localStorage.setItem('install-banner-dismissed', '1'); } catch(e){}
+  });
+}
+
+async function init(){
+  renderDateLine();
+  renderRows();
+  setupInstallBanner();
+
+  dataStore = await loadData();
+
+  const today = todayStr();
+  if (dataStore.entries[today]){
+    const e = dataStore.entries[today];
+    INDICATORS.forEach(ind => { selections[ind.key] = e[ind.key] || 'flat'; });
+    document.getElementById('note').value = e.note || '';
+    renderState();
+  }
+
+  renderHistory(dataStore);
+
+  document.getElementById('saveBtn').addEventListener('click', async () => {
+    const today = todayStr();
+    const entry = { ...selections, note: document.getElementById('note').value.trim(), ts: Date.now() };
+    dataStore.entries[today] = entry;
+    const ok = await saveData(dataStore);
+    const msg = document.getElementById('saveMsg');
+    msg.textContent = ok ? '保存しました' : '保存に失敗しました';
+    msg.classList.add('show');
+    setTimeout(() => msg.classList.remove('show'), 1800);
+    renderHistory(dataStore);
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', async () => {
+    if (!confirm('すべての記録履歴を消去します。よろしいですか？')) return;
+    dataStore = { entries:{} };
+    await saveData(dataStore);
+    renderHistory(dataStore);
+  });
+
+  document.getElementById('refreshBtn').addEventListener('click', fetchAll);
+
+  const apiPanel = document.getElementById('apiPanel');
+  const apiKeyInput = document.getElementById('apiKeyInput');
+  document.getElementById('settingsBtn').addEventListener('click', () => {
+    const opening = apiPanel.style.display === 'none';
+    apiPanel.style.display = opening ? 'block' : 'none';
+    if (opening) apiKeyInput.value = getApiKey();
+  });
+  document.getElementById('apiKeySave').addEventListener('click', () => {
+    setApiKeyStored(apiKeyInput.value.trim());
+    apiPanel.style.display = 'none';
+    fetchAll();
+  });
+
+  fetchAll();
+}
+
+init();
+</script>
+</body>
+</html>
